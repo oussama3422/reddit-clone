@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "836553455765",
+    "project_id": "reedit-app",
+    "storage_bucket": "reedit-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:836553455765:android:21c643dcb9e0d16154039c",
+        "android_client_info": {
+          "package_name": "com.example.reddit_clone"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "836553455765-c9a76g83b73pada8u1eek4o4q8l1lku5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBDfGL8ITnAnQufIPHZw1gSzBFvz8jr9Pg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "836553455765-c9a76g83b73pada8u1eek4o4q8l1lku5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
