@@ -8,15 +8,15 @@ class SingInButton extends ConsumerWidget {
   const SingInButton({super.key});
 
 
-  void singinWithGoogle(WidgetRef ref){
-   ref.read(authControllerProvider).singInWithGoogle();
+  void singinWithGoogle(BuildContext context,WidgetRef ref){
+   ref.read(authControllerProvider.notifier).singInWithGoogle(context);
   }
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     return Padding(
       padding: const EdgeInsets.all(18.0),
       child: ElevatedButton.icon(
-        onPressed: ()=>singinWithGoogle(ref),
+        onPressed: ()=>singinWithGoogle(context,ref),
         icon: Image.asset(Constants.googlePath,height: 23,),
         label: const Text('Continue With Google',style:TextStyle(fontSize: 18)),
         style:ElevatedButton.styleFrom(
