@@ -1,8 +1,8 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 
 class UserModel {
-
   final String name;
   final String profilePic;
   final String banner;
@@ -19,8 +19,7 @@ class UserModel {
     required this.karma,
     required this.awards,
   });
-
-
+  
 
   UserModel copyWith({
     String? name,
@@ -56,12 +55,12 @@ class UserModel {
 
   factory UserModel.fromMap(Map<String, dynamic> map) {
     return UserModel(
-      name: map['name'] ?? '',
-      profilePic: map['profilePic'] ?? '',
-      banner: map['banner'] ?? '',
-      uid: map['uid']  ?? '',
-      isAuthenticated: map['isAuthenticated'] ?? false,
-      karma: map['karma']?.toInt() ?? 0,
+      name: map['name'],
+      profilePic: map['profilePic'],
+      banner: map['banner'],
+      uid: map['uid'],
+      isAuthenticated:map['isAuthenticated'],
+      karma: map['karma']?.toInt(),
       awards: List<String>.from(map['awards']),
     );
   }
@@ -72,7 +71,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, uid: $uid,isAuthenticated:$isAuthenticated,karma: $karma, awards: $awards)';
+    return 'UserModel(name: $name, profilePic: $profilePic, banner: $banner, uid: $uid, isAuthenticated: $isAuthenticated, karma: $karma, awards: $awards)';
   }
 
   @override

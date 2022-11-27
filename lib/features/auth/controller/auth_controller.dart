@@ -36,9 +36,9 @@ class AuthController extends StateNotifier<bool>{
 
     void singInWithGoogle(BuildContext context)async{
       state=true;
-     final user =await _authRepository.singInWithGoogle();
+      final user =await _authRepository.singInWithGoogle();
       state=false;
-    user.fold((l)=>showSnackBar(context, l.toString()),(userModel)=>_ref.read(userProvder.notifier).update((state) => userModel));
+      user.fold((l)=>showSnackBar(context, l.toString()),(userModel)=>_ref.read(userProvder.notifier).update((state) => userModel));
     }
 Stream<UserModel> getUserData(String uid){
 return _authRepository.getUserData(uid);

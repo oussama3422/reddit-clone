@@ -4,16 +4,27 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/constant/constants.dart';
 import 'package:reddit_clone/core/utils.dart';
-import 'package:reddit_clone/features/auth/repositry/auth_repository.dart';
 import 'package:reddit_clone/features/community/repository/community_repository.dart';
 import 'package:reddit_clone/models/community.dart';
 import 'package:routemaster/routemaster.dart';
 
+import '../../auth/controller/auth_controller.dart';
+
+final userCommunityProvider=StreamProvider((ref){
+final communityController=ref.watch(communtyControllerProvider.notifier);
+return communityController.getUserCommunities();
+
+});
+
 final communtyControllerProvider = StateNotifierProvider<CommunityController,bool>((ref) {
-  final communityRepository=ref.watch(communtiyRositoryProvider);
+  final communityRepository=ref.watch(communtiyRepositoryProvider);
   return CommunityController(communityRepository: communityRepository, ref: ref);
 });
 
+
+final getCommunityByNameProvider=StreamProvider.family((ref,String name) {
+  return ref.watch(communtyControllerProvider.notifier).getCommunityyName(name);
+});
 class CommunityController extends StateNotifier<bool>{
 
   final CommunityRepository _communtiyRepository;
@@ -24,7 +35,10 @@ class CommunityController extends StateNotifier<bool>{
       required CommunityRepository communityRepository,
       required Ref ref,
     }
-  ):_communtiyRepository=communityRepository,_ref=ref,super(false);
+  ):
+  _communtiyRepository=communityRepository,
+  _ref=ref,
+  super(false);
 
 
 
@@ -36,8 +50,8 @@ class CommunityController extends StateNotifier<bool>{
       name: name,
       banner: Constants.bannerDefault,
       avatar: Constants.avatarDefault,
-      membres: [],
-      mods: []
+      members: [uid],
+      mods: [uid]
      );
      final res = await _communtiyRepository.createCommunity(community);
      state=false;
@@ -45,5 +59,15 @@ class CommunityController extends StateNotifier<bool>{
       showSnackBar(context, 'Community Created Successfully');
       Routemaster.of(context).pop();
      });
+  }
+
+  Stream<List<Community>> getUserCommunities(){
+  final uid=_ref.read(userProvder)!.uid;
+  return _communtiyRepository.getUserCommunities(uid);
+  }
+
+  Stream<Community> getCommunityyName(String name){
+  return _communtiyRepository.getCommunityyName(name);
+  
   }
 }

@@ -1,72 +1,97 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reddit_clone/common/error_text.dart';
 import 'package:reddit_clone/common/loader.dart';
+import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/community/controller/community_controller.dart';
 
-
-class CreateCommunityScreen extends ConsumerStatefulWidget {
-  const CreateCommunityScreen({super.key});
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() => _CreateCommunityScreenState();
-}
-class _CreateCommunityScreenState extends ConsumerState<CreateCommunityScreen> {
-  
-  
-  final TextEditingController communitynameController=TextEditingController();
+class CommunityScreen extends ConsumerWidget {
+  final String name;
+  const CommunityScreen({super.key,required this.name});
 
   @override
-  void dispose() {
-    communitynameController.dispose();
-    super.dispose();
-  }
-
-  void createCommunity(){
-    ref.read(communtyControllerProvider.notifier).createCommuntiy(
-      communitynameController.text.trim(),
-      context
-      );
-  }
-  @override
-  Widget build(BuildContext context) {
-    final isLoading=ref.watch(communtyControllerProvider);
+  Widget build(BuildContext context, WidgetRef ref) {
+    final user=ref.watch(userProvder)!;
     return Scaffold(
-      appBar: AppBar(
-        title:const Text('Create Community'),
-      ),
-     body:isLoading?const Loader():Padding(
-         padding: const EdgeInsets.all(11.0),
-         child:   Column(
-        children:  [
-        const Align(
-          alignment: Alignment.topLeft,
-          child: Text('Community name',style: TextStyle(fontWeight: FontWeight.bold),)
+      body: ref.watch(getCommunityByNameProvider(name)).when(
+        data:(community)=>NestedScrollView(
+          headerSliverBuilder: (context,nextBoxScroll){
+                    return [
+                      SliverAppBar(
+                        expandedHeight: 150,
+                        floating: true,
+                        snap:true,
+                        flexibleSpace: Stack
+                        (
+                          children:[
+                                Positioned.fill(child: Image.network(community.banner,fit:BoxFit.fill))
+                        ],
+                      ),
+                      ),
+                   SliverPadding(
+                    padding:const EdgeInsets.all(16),
+                    sliver: SliverList(
+                      delegate: SliverChildListDelegate(
+                        [
+                          Align(
+                            alignment: Alignment.topLeft,
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(community.avatar),
+                              radius:35 ,
+                              ),
+                          ),
+                          const SizedBox(height: 6),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                                Text(
+                                  'r/${community.name}',
+                                  style: const TextStyle(
+                                    fontSize: 19,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                community.mods.contains(user.uid)?
+                                OutlinedButton(
+                                   style:ElevatedButton.styleFrom(
+                                    shape:RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding:const EdgeInsets.symmetric(horizontal: 26),
+                                   ),
+                                   onPressed: (){},
+                                   child:const  Text('Mod Tools '),
+                                )
+                                :
+                                OutlinedButton(
+                                   style:ElevatedButton.styleFrom(
+                                    shape:RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    padding:const EdgeInsets.symmetric(horizontal: 26),
+                                   ),
+                                   onPressed: (){},
+                                   child:Text(community.mods.contains(user.uid)?"Joined":"Join"),
+                                )
+                            ],
+                            ),
+                            Padding(
+                              padding:const EdgeInsets.only(top:10),
+                              child:Text('${community.members.length} memebers')
+                              )
+                        ]
+                    ),
+                    ),
+                    
+                    )
+                ];
+          },
+          body:const Text('Displaying posts ') ,
           ),
-        const SizedBox(height: 10),
-        TextField(
-          controller: communitynameController,
-          decoration:const  InputDecoration(
-            hintText: 'r/Community_name',
-            filled:true,
-            border:InputBorder.none,
-            contentPadding:  EdgeInsets.all(10)
-          ),
-          maxLength: 21,
-        ),
-        const SizedBox(height: 10),
-        ElevatedButton(
-          onPressed: createCommunity,
-          style: ElevatedButton.styleFrom(
-            minimumSize: const Size(double.infinity,50),
-            shape:RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(20)
-            ),
-          ),
-          child:const Text('Create Community',style: TextStyle(fontSize: 18)),
-          )
-    ],
-  
-  ),
-),
-    );
+        error:(error,stackTrace)=>ErrorText(error: error.toString()),
+        loading:()=>const Loader(),
+        )
+        );
   }
 }

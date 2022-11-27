@@ -10,7 +10,6 @@ import 'package:reddit_clone/core/provider/firebase_provider.dart';
 import 'package:reddit_clone/models/user_model.dart';
 import '../../../core/provider/type_defs.dart';
 
-final userProvder=StateProvider<UserModel?>((ref) => null );
 
 final authRepositoryProvider = Provider((ref)=>AuthRepository(
   firebaseAuth:ref.read(authprovider) ,
@@ -52,22 +51,21 @@ FutureEither<UserModel?> singInWithGoogle()async{
     );
     UserCredential userCredential=await _firebaseAuth.signInWithCredential(credential);
     UserModel userModel;
-     final user=userCredential.user;
      if(userCredential.additionalUserInfo!.isNewUser)
      {
        
       userModel=UserModel(
-           name: user!.displayName ?? 'No Name',
-           profilePic: user.photoURL??Constants.avatarDefault,
+           name: userCredential.user!.displayName ?? 'No Name',
+           profilePic: userCredential.user!.photoURL??Constants.avatarDefault,
            banner:Constants.bannerDefault,
-           uid: user.uid,
+           uid: userCredential.user!.uid,
            isAuthenticated: true,
            karma: 0,
             awards: [],
       );
       await _users.doc(userModel.uid).set( userModel.toMap(),);
     }else{
-          userModel=await getUserData(user!.uid).first;
+          userModel=await getUserData(userCredential.user!.uid).first;
     }
        return right(userModel);
     }on FirebaseException catch(e){
@@ -81,7 +79,7 @@ FutureEither<UserModel?> singInWithGoogle()async{
 }
 
 Stream<UserModel> getUserData(String uid){
-  return _users.doc(uid).snapshots().map((event) => UserModel.fromMap(event.data() as Map<String,dynamic>));
+  return _users.doc(uid).snapshots().map((event) => UserModel.fromMap(event.data() as Map<String,dynamic> ));
 }
 
 }

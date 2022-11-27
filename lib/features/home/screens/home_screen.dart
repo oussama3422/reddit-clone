@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/features/auth/repositry/auth_repository.dart';
 import 'package:reddit_clone/features/home/drawers/comunity_list_drawer.dart';
 
+import '../../auth/controller/auth_controller.dart';
+
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
@@ -31,7 +33,7 @@ class HomeScreen extends ConsumerWidget {
           IconButton(
             onPressed: (){},
             icon: CircleAvatar(
-              backgroundImage: NetworkImage(user?.profilePic ?? 'O'),
+              backgroundImage: NetworkImage(user!.profilePic),
             ),
           )
 
