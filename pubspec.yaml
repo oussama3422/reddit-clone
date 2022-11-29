@@ -20,6 +20,8 @@ dependencies:
   cloud_firestore: ^4.1.0
   fpdart: ^0.3.0
   routemaster: ^1.0.1
+  dotted_border: ^2.0.0+3
+  file_picker: ^5.2.2
 
 dev_dependencies:
   flutter_test:
