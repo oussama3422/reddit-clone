@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reddit_clone/core/enums/enums.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/theme/pallets.dart';
 import 'package:routemaster/routemaster.dart';
@@ -13,6 +14,9 @@ class ProfileDrawer extends ConsumerWidget {
   }
    void navigateToModProfile(BuildContext context,String uid){
     Routemaster.of(context).push('/u/$uid');
+  }
+  void toogleTheme(WidgetRef ref){
+    ref.read(themeNotifierProvider.notifier).toggleTheme();
   }
   @override
   Widget build(BuildContext context,WidgetRef ref) {
@@ -56,10 +60,8 @@ class ProfileDrawer extends ConsumerWidget {
             ),
             const SizedBox(height: 15),
             Switch.adaptive(
-              value: true,
-              onChanged: (newVal){
-                
-              }
+              value: ref.watch(themeNotifierProvider.notifier).mods == ThemeModes.dark,
+              onChanged: (newVal)=>toogleTheme(ref)
               )
           ],
         ),
