@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/core/utils.dart';
-import 'package:reddit_clone/features/auth/repositry/auth_repository.dart';
+import 'package:reddit_clone/features/auth/repository/auth_repository.dart';
 import '../../../models/user_model.dart';
 
 final userProvder=StateProvider<UserModel?>((ref) => null );
@@ -44,5 +44,7 @@ Stream<UserModel> getUserData(String uid){
 return _authRepository.getUserData(uid);
 
 }
-  
+  void logOut(){
+       _authRepository.logOut();
+  }
 }

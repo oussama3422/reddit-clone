@@ -61,5 +61,66 @@ class CommunityRepository{
     }
   }
 
+  FutureVoid joinCommunity(String communityName,String userId)async{
+    try{
+
+        return right( _communities.doc(communityName).update({
+          'members':FieldValue.arrayUnion([userId]),
+        })
+        );
+    }on FirebaseException catch(e){
+      throw e.message!;
+    }catch(error){
+      return left(Failure(message: error.toString()));
+    }
+  }
+  FutureVoid leaveCommunity(String communityName,String userId)async{
+    try{
+
+        return right( _communities.doc(communityName).update({
+          'members':FieldValue.arrayRemove([userId]),
+        })
+        );
+    }on FirebaseException catch(e){
+      throw e.message!;
+    }catch(error){
+      return left(Failure(message: error.toString()));
+    }
+  }
+
+  Stream<List<Community>> searchCommunity(String query){
+    return _communities.where(
+      'name',
+      isGreaterThanOrEqualTo:query.isEmpty ? 0:query,
+      isLessThan:query.isEmpty
+      ?null
+      :query.substring( 0,query.length - 1) +
+      String.fromCharCode(
+        query.codeUnitAt(query.length-1) + 1,
+      ),
+        )
+        .snapshots().map((event) {
+          List<Community> communties=[];
+          for (var communtiy in event.docs){
+            communties.add(Community.fromMap(communtiy.data() as Map<String,dynamic>));
+          }
+          return communties;
+        });
+  }
+
+  FutureVoid addMods(String communityName,List<String> uids)async{
+    try{
+        return right(_communities.doc(communityName).update({
+          'mods':uids,
+        }));
+    }on FirebaseException catch (error){
+      throw error.message!;
+    }
+    
+    catch(error){
+      return left(Failure(message: error.toString()));
+    }
+  }
+
   CollectionReference get _communities => _firestore.collection(FirebaseConstant.communitiesCollection);
 }

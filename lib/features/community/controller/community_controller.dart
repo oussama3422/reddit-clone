@@ -4,7 +4,9 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:fpdart/fpdart.dart';
 import 'package:reddit_clone/core/constant/constants.dart';
+import 'package:reddit_clone/core/provider/failure.dart';
 import 'package:reddit_clone/core/utils.dart';
 import 'package:reddit_clone/features/community/repository/community_repository.dart';
 import 'package:reddit_clone/models/community.dart';
@@ -16,6 +18,10 @@ import '../../auth/controller/auth_controller.dart';
 final userCommunityProvider=StreamProvider((ref){
 final communityController=ref.watch(communtyControllerProvider.notifier);
 return communityController.getUserCommunities();
+
+});
+final searchCommunityProvider=StreamProvider.family((ref,String query){
+return ref.watch(communtyControllerProvider.notifier).searchCommunity(query);
 
 });
 
@@ -114,4 +120,36 @@ class CommunityController extends StateNotifier<bool>{
       res.fold((l) => showSnackBar(context, l.message), (r) =>Routemaster.of(context).pop());
       
    }
+
+   // this function help us to join to community and leave from it
+  void joinCommuntiy(Community community,BuildContext context)async{
+    final user=_ref.read(userProvder)!;
+    Either<Failure,void> res;
+    if(community.members.contains(user.uid)){
+      res=await _communtiyRepository.leaveCommunity(community.name,user.uid);
+    }else{
+      res=await _communtiyRepository.joinCommunity(community.name,user.uid);
+    }
+    res.fold((l)=>showSnackBar(context, l.message), (r){
+      if (community.members.contains(user.uid)){
+        showSnackBar(context, 'Community left successfully!');
+      }else{
+        showSnackBar(context, 'Community joined successfully!');
+      }
+     } );
+  }
+
+   Stream<List<Community>> searchCommunity(String query){
+    return _communtiyRepository.searchCommunity(query);
+   }
+
+  void addMods(String communityName,List<String> uids,BuildContext context)async{
+  
+  final res=await _communtiyRepository.addMods(communityName, uids);
+
+  res.fold(
+    (l) =>showSnackBar(context, l.message) ,
+    (r) => Routemaster.of(context).pop(),
+    );
+  }
 }
