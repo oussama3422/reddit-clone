@@ -12,6 +12,7 @@ import 'package:reddit_clone/features/user_profile/screens/user_profile_screen.d
 import 'package:routemaster/routemaster.dart';
 
 import 'features/community/screens/create_community_screen.dart';
+import 'features/posts/screens/add_post_type_screen.dart';
 
 final loggedOutRoute=RouteMap(
   routes: {
@@ -27,7 +28,8 @@ final loggedInRoute=RouteMap(
   '/edit-community/:name':(routeData) =>MaterialPage(child:EditCommunityScreen(name:routeData.pathParameters['name']!) ),
   '/add-mods/:name':(routeData) =>MaterialPage(child:AddModsScreen(name:routeData.pathParameters['name']!) ),
   '/u/:uid':(routeData)=>MaterialPage(child:UserProfuleScreen(uid:routeData.pathParameters['uid']!) ),
-  '/edit-profile/:uid':(routeData)=>MaterialPage(child:EditProfileScreen(uid:routeData.pathParameters['uid']!) )
+  '/edit-profile/:uid':(routeData)=>MaterialPage(child:EditProfileScreen(uid:routeData.pathParameters['uid']!) ),
+  '/add-post/:type':(routeData)=>MaterialPage(child:AddPostTypeScreen(type:routeData.pathParameters['type']!) ),
   }
   );
 

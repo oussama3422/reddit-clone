@@ -13,7 +13,7 @@ class Constants{
   
   
   static const tabWidget=[
-      AddPostScreen(),
       FeedScreen(),
+      AddPostScreen(),
   ];
 }
