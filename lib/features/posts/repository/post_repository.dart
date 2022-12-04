@@ -40,9 +40,9 @@ FutureVoid addPost(Post post)async{
 }
   Stream<List<Post>> fetchUserPosts(List<Community> communites){
     return _posts.where(
-        'commmunityName',
+        'communityName',
          whereIn: communites.map((e) => e.name).toList(),
-      ).orderBy('createAt',descending: true)
+      ).orderBy('createdAt',descending: true)
        .snapshots()
        .map(
         (event) => event.docs

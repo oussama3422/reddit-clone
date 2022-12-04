@@ -44,7 +44,7 @@ void onPageChange(int page){
     final currentTheme=ref.watch(themeNotifierProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Home'),
+        title: const Text('Home',style:TextStyle(fontFamily: 'ZenDots')),
         centerTitle: false,
         leading: Builder(
           builder: (context) {

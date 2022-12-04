@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/models/post.dart';
 import 'package:reddit_clone/theme/pallets.dart';
-
+import 'package:any_link_preview/any_link_preview.dart';
 
 
 class PostCard extends ConsumerWidget {
@@ -26,7 +26,7 @@ class PostCard extends ConsumerWidget {
           padding:const EdgeInsets.symmetric(vertical: 10),
           child:Row(
             children: [
-              Expanded(
+              Expanded( 
                 child: Column(
                   children:[
                     Container(
@@ -86,7 +86,29 @@ class PostCard extends ConsumerWidget {
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.35,
                             width:double.infinity,
-                            child:Image.network(post.link!)
+                            child:Image.network(post.link!,fit:BoxFit.cover),
+                            ),
+                          if (isTypeLinks)
+                          SizedBox(
+                            height: MediaQuery.of(context).size.height * 0.35,
+                            width:double.infinity,
+                            child:AnyLinkPreview(
+                              displayDirection:UIDirection.uiDirectionHorizontal,
+                              link:post.link!,
+                            )
+                            ),
+                            if(isTypeText)
+                            Container(
+                              padding: const EdgeInsets.symmetric(horizontal:15.0),
+                              child: Text(
+                                post.description!,
+                                style:const TextStyle(color:Colors.grey)
+                              ),
+                            ),
+                            Row(
+                              children: [
+
+                              ],
                             )
                         ]
                         ),
