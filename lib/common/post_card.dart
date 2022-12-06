@@ -1,6 +1,10 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reddit_clone/core/constant/constants.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
+import 'package:reddit_clone/features/posts/controller/post_controller.dart';
 import 'package:reddit_clone/models/post.dart';
 import 'package:reddit_clone/theme/pallets.dart';
 import 'package:any_link_preview/any_link_preview.dart';
@@ -9,6 +13,20 @@ import 'package:any_link_preview/any_link_preview.dart';
 class PostCard extends ConsumerWidget {
   final Post post;
   const PostCard({super.key,required this.post});
+
+
+  void deletePost(WidgetRef ref,BuildContext context)async{
+    ref.read(postsContollerProvider.notifier).deletePost(post,context);
+  }
+
+  void upVotePost(WidgetRef ref)async{
+    ref.read(postsContollerProvider.notifier).upvote(post);
+  }
+
+  void downVotePost(WidgetRef ref)async{
+    ref.read(postsContollerProvider.notifier).downvote(post);
+  }
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -64,7 +82,7 @@ class PostCard extends ConsumerWidget {
                               ),
                                if (post.id == user.uid)
                                   IconButton(
-                                    onPressed: (){},
+                                    onPressed: ()=>deletePost(ref,context),
                                     icon: Icon(
                                       Icons.delete,
                                       color:Pallete.redColor
@@ -89,14 +107,13 @@ class PostCard extends ConsumerWidget {
                             child:Image.network(post.link!,fit:BoxFit.cover),
                             ),
                           if (isTypeLinks)
-                          SizedBox(
-                            height: MediaQuery.of(context).size.height * 0.35,
-                            width:double.infinity,
-                            child:AnyLinkPreview(
+                          Container(
+                            padding:const EdgeInsets.symmetric(horizontal: 18),
+                            child: AnyLinkPreview(
                               displayDirection:UIDirection.uiDirectionHorizontal,
                               link:post.link!,
-                            )
                             ),
+                          ),
                             if(isTypeText)
                             Container(
                               padding: const EdgeInsets.symmetric(horizontal:15.0),
@@ -106,10 +123,53 @@ class PostCard extends ConsumerWidget {
                               ),
                             ),
                             Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-
+                                Row(
+                                  children: [
+                                    IconButton(
+                                      onPressed: ()=>upVotePost(ref),
+                                      icon:  Icon(
+                                        const IconData(0xe800,fontFamily: 'ZenDots',fontPackage: null),
+                                        color:post.upvotes.contains(user.uid)? Pallete.redColor : null,
+                                        )
+                                        ),
+                                        Text(
+                                          '${post.upvotes.length - post.downvotes.length == 0 ? 'Vote' :post.upvotes.length - post.downvotes.length}',
+                                          style: const TextStyle(fontSize: 17),
+                                          ),
+                                    IconButton(
+                                        onPressed: ()=>downVotePost(ref),
+                                      icon:  Icon(
+                                        const IconData(0xe800,fontFamily: 'ZenDots',fontPackage: null),
+                                        color:post.upvotes.contains(user.uid)? Pallete.redColor : null,
+                                        )
+                                        )
+                                  ],
+                                ),
+                                Row(
+                                  children: [
+                                       IconButton(
+                                        onPressed: (){},
+                                      icon: const Icon(
+                                        Icons.comment,
+                                        )
+                                        ),
+                                        Text(
+                                          '${post.commmentCount == 0 ? 'Comment' : post.commmentCount }',
+                                          style: const TextStyle(fontSize: 17), 
+                                          ),
+                                      
+                                  ],
+                                ),
+                                 IconButton(
+                                        onPressed: (){},
+                                      icon: const Icon(
+                                        Icons.admin_panel_settings,
+                                        )
+                                        ),
                               ],
-                            )
+                            ),
                         ]
                         ),
                     )
