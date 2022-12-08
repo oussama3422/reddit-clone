@@ -3,9 +3,6 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 
 class Community {
-
-
-
   final String id;
   final String name;
   final String banner;

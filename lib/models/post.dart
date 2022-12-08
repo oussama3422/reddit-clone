@@ -7,7 +7,7 @@ class Post {
   final String title;
   final String? link;
   final String? description;
-  final String communtiyName;
+  final String communityName;
   final String communityProfile;
   final List<String> upvotes;
   final List<String> downvotes;
@@ -15,14 +15,14 @@ class Post {
   final String username;
   final String uid;
   final String type;
-  final DateTime createAt;
+  final DateTime createdAt;
   final List<String> awards;
   Post({
     required this.id,
     required this.title,
     this.link,
     this.description,
-    required this.communtiyName,
+    required this.communityName,
     required this.communityProfile,
     required this.upvotes,
     required this.downvotes,
@@ -30,7 +30,7 @@ class Post {
     required this.username,
     required this.uid,
     required this.type,
-    required this.createAt,
+    required this.createdAt,
     required this.awards,
   });
 
@@ -39,7 +39,7 @@ class Post {
     String? title,
     String? link,
     String? description,
-    String? communtiyName,
+    String? communityName,
     String? communityProfile,
     List<String>? upvotes,
     List<String>? downvotes,
@@ -47,7 +47,7 @@ class Post {
     String? username,
     String? uid,
     String? type,
-    DateTime? createAt,
+    DateTime? createdAt,
     List<String>? awards,
   }) {
     return Post(
@@ -55,7 +55,7 @@ class Post {
       title: title ?? this.title,
       link: link ?? this.link,
       description: description ?? this.description,
-      communtiyName: communtiyName ?? this.communtiyName,
+      communityName: communityName ?? this.communityName,
       communityProfile: communityProfile ?? this.communityProfile,
       upvotes: upvotes ?? this.upvotes,
       downvotes: downvotes ?? this.downvotes,
@@ -63,7 +63,7 @@ class Post {
       username: username ?? this.username,
       uid: uid ?? this.uid,
       type: type ?? this.type,
-      createAt: createAt ?? this.createAt,
+      createdAt: createdAt ?? this.createdAt,
       awards: awards ?? this.awards,
     );
   }
@@ -74,7 +74,7 @@ class Post {
       'title': title,
       'link': link,
       'description': description,
-      'communtiyName': communtiyName,
+      'communityName': communityName,
       'communityProfile': communityProfile,
       'upvotes': upvotes,
       'downvotes': downvotes,
@@ -82,7 +82,7 @@ class Post {
       'username': username,
       'uid': uid,
       'type': type,
-      'createAt': createAt.toUtc().toIso8601String(),
+      'createdAt': createdAt.toUtc().toIso8601String(),
       'awards': awards,
     };
   }
@@ -93,7 +93,7 @@ class Post {
       title: map['title'],
       link: map['link'],
       description: map['description'],
-      communtiyName: map['communtiyName'],
+      communityName: map['communityName'],
       communityProfile: map['communityProfile'],
       upvotes: List<String>.from(map['upvotes']),
       downvotes: List<String>.from(map['downvotes']),
@@ -101,7 +101,7 @@ class Post {
       username: map['username'],
       uid: map['uid'],
       type: map['type'],
-      createAt: DateTime.parse(map['createAt']).toLocal(),
+      createdAt: DateTime.parse(map['createdAt']).toLocal(),
       awards: List<String>.from(map['awards']),
     );
   }
@@ -112,7 +112,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(id: $id, title: $title, link: $link, description: $description, communtiyName: $communtiyName, communityProfile: $communityProfile, upvotes: $upvotes, downvotes: $downvotes, commmentCount: $commmentCount, username: $username, uid: $uid, type: $type, createAt: $createAt, awards: $awards)';
+    return 'Post(id: $id, title: $title, link: $link, description: $description, communityName: $communityName, communityProfile: $communityProfile, upvotes: $upvotes, downvotes: $downvotes, commmentCount: $commmentCount, username: $username, uid: $uid, type: $type, createAt: $createdAt, awards: $awards)';
   }
 
   @override
@@ -124,7 +124,7 @@ class Post {
       other.title == title &&
       other.link == link &&
       other.description == description &&
-      other.communtiyName == communtiyName &&
+      other.communityName == communityName &&
       other.communityProfile == communityProfile &&
       listEquals(other.upvotes, upvotes) &&
       listEquals(other.downvotes, downvotes) &&
@@ -132,7 +132,7 @@ class Post {
       other.username == username &&
       other.uid == uid &&
       other.type == type &&
-      other.createAt == createAt &&
+      other.createdAt == createdAt &&
       listEquals(other.awards, awards);
   }
 
@@ -142,7 +142,7 @@ class Post {
       title.hashCode ^
       link.hashCode ^
       description.hashCode ^
-      communtiyName.hashCode ^
+      communityName.hashCode ^
       communityProfile.hashCode ^
       upvotes.hashCode ^
       downvotes.hashCode ^
@@ -150,7 +150,7 @@ class Post {
       username.hashCode ^
       uid.hashCode ^
       type.hashCode ^
-      createAt.hashCode ^
+      createdAt.hashCode ^
       awards.hashCode;
   }
 }

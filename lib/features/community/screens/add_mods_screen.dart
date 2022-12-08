@@ -50,13 +50,13 @@ class _AddModsScreenState extends ConsumerState<AddModsScreen> {
         itemCount: community.members.length,
         itemBuilder: (context,index){
           final member=community.members[index];
-          ref.watch(getUserDataProvider(member)).when(
+          return ref.watch(getUserDataProvider(member)).when(
              data: (user){
               if (community.mods.contains(member) && cnt==0){
                 uids.add(member);
               }
              cnt++;
-             CheckboxListTile(
+            return CheckboxListTile(
                 value: uids.contains(user.uid),
                 onChanged: (newVal){
                     if (newVal!){
@@ -72,11 +72,6 @@ class _AddModsScreenState extends ConsumerState<AddModsScreen> {
              error: (error,stackTrace)=>ErrorText(error: error.toString()),
              loading: ()=>const Loader(),
           );
-          return CheckboxListTile(
-            value: true,
-            onChanged: (newVal){},
-            title:Text(member),
-            );
         }
         ),
       error: (error,stackTrace)=>ErrorText(error: error.toString()),

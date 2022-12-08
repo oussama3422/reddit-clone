@@ -53,7 +53,7 @@ class PostController extends StateNotifier<bool>{
       final Post post= Post(
           id:postId ,
           title: title,
-          communtiyName:selectedCommunity.name ,
+          communityName:selectedCommunity.name ,
           communityProfile:selectedCommunity.avatar ,
           upvotes:[],
           downvotes:[] ,
@@ -61,7 +61,7 @@ class PostController extends StateNotifier<bool>{
           username:user.name,
           uid:user.uid ,
           type: 'text',
-          createAt: DateTime.now(),
+          createdAt: DateTime.now(),
           awards:[] ,
           description: description,
           );
@@ -88,7 +88,7 @@ class PostController extends StateNotifier<bool>{
       final Post post= Post(
           id:postId ,
           title: title,
-          communtiyName:selectedCommunity.name ,
+          communityName:selectedCommunity.name ,
           communityProfile:selectedCommunity.avatar ,
           upvotes:[],
           downvotes:[] ,
@@ -96,7 +96,7 @@ class PostController extends StateNotifier<bool>{
           username:user.name,
           uid:user.uid ,
           type: 'link',
-          createAt: DateTime.now(),
+          createdAt: DateTime.now(),
           awards:[] ,
           link: links,
           );
@@ -132,7 +132,7 @@ class PostController extends StateNotifier<bool>{
              final Post post= Post(
              id:postId ,
              title: title,
-             communtiyName:selectedCommunity.name ,
+             communityName:selectedCommunity.name ,
              communityProfile:selectedCommunity.avatar ,
              upvotes:[],
              downvotes:[] ,
@@ -140,7 +140,7 @@ class PostController extends StateNotifier<bool>{
              username:user.name,
              uid:user.uid ,
              type: 'image',
-             createAt: DateTime.now(),
+             createdAt: DateTime.now(),
              awards:[] ,
              link: success,
           );
