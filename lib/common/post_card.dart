@@ -52,6 +52,7 @@ class PostCard extends ConsumerWidget {
     final isTypeLinks=post.type=='link';
     final user=ref.watch(userProvder)!;
     final currentTheme=ref.watch(themeNotifierProvider);
+    final isAuth=user.isAuthenticated;
     return Column(
       children: [
         Container(
@@ -167,7 +168,7 @@ class PostCard extends ConsumerWidget {
                                 Row(
                                   children: [
                                     IconButton(
-                                      onPressed: ()=>upVotePost(ref),
+                                      onPressed:isAuth? ()=>upVotePost(ref):(){},
                                       icon:  Icon(
                                         Icons.arrow_upward,
                                         size:40,
@@ -179,7 +180,7 @@ class PostCard extends ConsumerWidget {
                                           style: const TextStyle(fontSize: 17),
                                           ),
                                     IconButton(
-                                        onPressed: ()=>downVotePost(ref),
+                                        onPressed:isAuth? ()=>downVotePost(ref):(){},
                                       icon:  Icon(
                                         Icons.arrow_downward,
                                         size:40,
@@ -220,7 +221,7 @@ class PostCard extends ConsumerWidget {
                                   loading:()=>const Loader(),
                                 ),
                                 IconButton(
-                                  onPressed: (){
+                                  onPressed: isAuth?(){
                                     showDialog(
                                       context: context,
                                       builder:(context)=>Dialog(
@@ -245,7 +246,7 @@ class PostCard extends ConsumerWidget {
                                           )
                                       )
                                        );
-                                  },
+                                  }:(){},
                                   icon:const Icon(Icons.card_giftcard_outlined),
                                   )
                               ],

@@ -9,6 +9,7 @@ import 'package:reddit_clone/features/posts/controller/post_controller.dart';
 import 'package:reddit_clone/features/posts/widgets/comment_card.dart';
 
 import '../../../models/post.dart';
+import '../../auth/controller/auth_controller.dart';
 
 class CommentScreen extends ConsumerStatefulWidget {
   final String postId;
@@ -42,6 +43,8 @@ void addComment(Post post){
 
   @override
   Widget build(BuildContext context) {
+    final user=ref.watch(userProvder)!;
+    final isAuth=user.isAuthenticated;
     return Scaffold(
       appBar: AppBar(),
       body:ref.watch(getPostByIdProvider(widget.postId)).when(
@@ -50,6 +53,7 @@ void addComment(Post post){
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
             PostCard(post: data),
+            if(isAuth)
             TextField(
               onSubmitted: (val)=>addComment(data),
               controller:commentController,

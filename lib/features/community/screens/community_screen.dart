@@ -24,6 +24,7 @@ class CommunityScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final user=ref.watch(userProvder)!;
+    final isAuth=user.isAuthenticated;
     return Scaffold(
       body: ref.watch(getCommunityByNameProvider(name)).when(
         data:(community)=>NestedScrollView(
@@ -63,6 +64,9 @@ class CommunityScreen extends ConsumerWidget {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
+
+
+                              if(isAuth)
                                 community.mods.contains(user.uid)?
                                 OutlinedButton(
                                    style:ElevatedButton.styleFrom(
@@ -85,7 +89,8 @@ class CommunityScreen extends ConsumerWidget {
                                    ),
                                    child:Text(community.mods.contains(user.uid)?"Join":"Joined"),
                                 )
-                            ],
+                            ]
+                            
                             ),
                             Padding(
                               padding:const EdgeInsets.only(top:10),
