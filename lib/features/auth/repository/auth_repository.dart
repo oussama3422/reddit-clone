@@ -41,7 +41,7 @@ Stream<User?> get authStateChange => _firebaseAuth.authStateChanges();
 
 
 
-FutureEither<UserModel?> singInWithGoogle()async{
+FutureEither<UserModel?> singInWithGoogle(bool isFromLogin)async{
   try{
     final GoogleSignInAccount? googleUser=await _googleSignIn.signIn();
     final googelAuth=await googleUser?.authentication;
@@ -49,7 +49,12 @@ FutureEither<UserModel?> singInWithGoogle()async{
     accessToken:googelAuth?.accessToken,
     idToken:googelAuth?.idToken,
     );
-    UserCredential userCredential=await _firebaseAuth.signInWithCredential(credential);
+    UserCredential userCredential;
+    if(isFromLogin){
+        userCredential=await _firebaseAuth.signInWithCredential(credential);
+    }else{
+       userCredential=await _firebaseAuth.currentUser!.linkWithCredential(credential);
+    }
     UserModel userModel;
      if(userCredential.additionalUserInfo!.isNewUser)
      {
@@ -61,7 +66,16 @@ FutureEither<UserModel?> singInWithGoogle()async{
            uid: userCredential.user!.uid,
            isAuthenticated: true,
            karma: 0,
-            awards: [],
+            awards: [
+                  'awesomeAns',
+                  'gold',
+                  'platinum',
+                  'helpful',
+                  'plusone',
+                  'rocket',
+                  'thankyou', 
+                  'til',
+            ],
       );
       await _users.doc(userModel.uid).set( userModel.toMap(),);
     }else{
@@ -76,6 +90,32 @@ FutureEither<UserModel?> singInWithGoogle()async{
     }
 
 
+}
+
+
+FutureEither<UserModel?> singInAsGuest()async{
+  try{
+   
+    UserCredential userCredential=await _firebaseAuth.signInAnonymously();
+    UserModel userModel;
+       
+      userModel=UserModel(
+           name: 'Guest',
+           profilePic:Constants.avatarDefault,
+           banner:Constants.bannerDefault,
+           uid: userCredential.user!.uid,
+           isAuthenticated: false,
+           karma: 0,
+            awards: [ ],
+      );
+    await _users.doc(userModel.uid).set( userModel.toMap(),);
+    return right(userModel);
+    }on FirebaseException catch(e){
+      throw e.message!;
+    }
+    catch(error){
+       return left(Failure(message: error.toString()));
+    }
 }
 
 Stream<UserModel> getUserData(String uid){

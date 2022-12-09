@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:reddit_clone/common/loader.dart';
+import 'package:reddit_clone/core/constant/constants.dart';
 import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/features/community/controller/community_controller.dart';
 import 'package:reddit_clone/features/posts/controller/post_controller.dart';
@@ -28,12 +29,21 @@ class PostCard extends ConsumerWidget {
   void downVotePost(WidgetRef ref)async{
     ref.read(postsContollerProvider.notifier).downvote(post);
   }
+  //
+  void awardPost(WidgetRef ref,String award,BuildContext context){
+    ref.read(postsContollerProvider.notifier).awardPost(post: post, award: award, context: context);
+  }
+  //
   void navigateToUser(BuildContext context){
     Routemaster.of(context).push('/u/${post.uid}');
   }
   void navigateToCommuntiy(BuildContext context){
     Routemaster.of(context).push('/r/${post.communityName}');
   }
+  void navigateToComment(BuildContext context){
+    Routemaster.of(context).push('/post/${post.id}/comments');
+  }
+
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -103,16 +113,32 @@ class PostCard extends ConsumerWidget {
                                     ),
                             ],
                           ),
+                          if(post.awards.isNotEmpty)...[
+                                const SizedBox(height:5),
+                                SizedBox(
+                                height:25,
+                                child:ListView.builder(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount:post.awards.length,
+                                  itemBuilder: (context,index){
+                                    final award = post.awards[index];
+                                        return Image.asset(Constants.awards[award]!);
+                                  }
+                                  )
+                          ),
+                          ],
                           Padding(
                             padding: const EdgeInsets.only(top:10.0),
                             child: Text(
                               post.title,
                               style: const TextStyle(
                                 fontSize:19,
-                                fontWeight:FontWeight.bold
+                                fontWeight:FontWeight.w600,
+                                fontFamily: 'ZenDots',
                                 ),
                                 ),
                           ),
+                          const SizedBox(height:15),
                           if (isTypeImage)
                           SizedBox(
                             height: MediaQuery.of(context).size.height * 0.35,
@@ -143,7 +169,8 @@ class PostCard extends ConsumerWidget {
                                     IconButton(
                                       onPressed: ()=>upVotePost(ref),
                                       icon:  Icon(
-                                        const IconData(0xe800,fontFamily: 'ZenDots',fontPackage: null),
+                                        Icons.arrow_upward,
+                                        size:40,
                                         color:post.upvotes.contains(user.uid)? Pallete.redColor : null,
                                         )
                                         ),
@@ -154,8 +181,9 @@ class PostCard extends ConsumerWidget {
                                     IconButton(
                                         onPressed: ()=>downVotePost(ref),
                                       icon:  Icon(
-                                        const IconData(0xe800,fontFamily: 'ZenDots',fontPackage: null),
-                                        color:post.upvotes.contains(user.uid)? Pallete.redColor : null,
+                                        Icons.arrow_downward,
+                                        size:40,
+                                        color:post.downvotes.contains(user.uid)? Pallete.redColor : null,
                                         )
                                         )
                                   ],
@@ -163,13 +191,13 @@ class PostCard extends ConsumerWidget {
                                 Row(
                                   children: [
                                        IconButton(
-                                        onPressed: (){},
+                                        onPressed: ()=>navigateToComment(context),
                                       icon: const Icon(
                                         Icons.comment,
                                         )
                                         ),
                                         Text(
-                                          '${post.commmentCount == 0 ? 'Comment' : post.commmentCount }',
+                                          '${post.commentCount == 0 ? 'Comment' : post.commentCount }',
                                           style: const TextStyle(fontSize: 17), 
                                           ),
                                       
@@ -191,7 +219,35 @@ class PostCard extends ConsumerWidget {
                                   error:(error, stackTrace) =>ErrorText(error: error.toString()),
                                   loading:()=>const Loader(),
                                 ),
-                                
+                                IconButton(
+                                  onPressed: (){
+                                    showDialog(
+                                      context: context,
+                                      builder:(context)=>Dialog(
+                                        child:Padding(
+                                          padding:const EdgeInsets.all(20) ,
+                                          child: GridView.builder
+                                          (
+                                            itemCount: user.awards.length,
+                                            shrinkWrap: true,
+                                            gridDelegate:const SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4),
+                                            itemBuilder: (context,index){
+                                                  final award=user.awards[index];
+                                                  return InkWell(
+                                                    onTap:()=>awardPost(ref, award, context) ,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.all(8.0),
+                                                      child: Image.asset(Constants.awards[award]!),
+                                                    ),
+                                                  );
+                                            }
+                                            ),
+                                          )
+                                      )
+                                       );
+                                  },
+                                  icon:const Icon(Icons.card_giftcard_outlined),
+                                  )
                               ],
                             ),
                         ]
@@ -201,9 +257,9 @@ class PostCard extends ConsumerWidget {
                 ),
               ),
             ],
-          )
-
-        )
+          ),
+        ),
+        const SizedBox(height:10),
       ],
     );
   }

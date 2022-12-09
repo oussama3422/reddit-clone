@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:reddit_clone/common/post_card.dart';
+import 'package:reddit_clone/features/user_profile/controller/user_profile_controller.dart';
 import 'package:routemaster/routemaster.dart';
 
 import '../../../common/error_text.dart';
@@ -83,13 +85,27 @@ class UserProfuleScreen extends ConsumerWidget {
                     ),
                     ),
                     
-                    )
+                    ),
+                  
                 ];
           },
-          body:const Padding(
-            padding:  EdgeInsets.all(20.0),
-            child:  Text('Displaying posts '),
-          ) ,
+          body:ref.watch(getUserPostsProvider(uid)).when(
+            data:(data){
+              return ListView.builder(
+                itemCount: data.length,
+                itemBuilder: (context,index){
+                  final post=data[index];
+                  return PostCard(post: post);
+                }
+                
+                );
+            },
+            error:(error, stackTrace) {
+                print(error);
+               return ErrorText(error: error.toString());
+               },
+            loading:()=>const Loader(),
+          )
           ),
         error:(error,stackTrace)=>ErrorText(error: error.toString()),
         loading:()=>const Loader(),

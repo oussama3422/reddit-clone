@@ -39,8 +39,8 @@ void onPageChange(int page){
 
   @override
   Widget build(BuildContext context) {
-    final user=ref.watch(userProvder);
-
+    final user=ref.watch(userProvder)!;
+    final isAuth=user.isAuthenticated;
     final currentTheme=ref.watch(themeNotifierProvider);
     return Scaffold(
       appBar: AppBar(
@@ -66,7 +66,7 @@ void onPageChange(int page){
               return IconButton(
                 onPressed: ()=>displayEndDrawer(context),
                 icon: CircleAvatar(
-                  backgroundImage: NetworkImage(user!.profilePic),
+                  backgroundImage: NetworkImage(user.profilePic),
                 ),
               );
             }
@@ -76,8 +76,8 @@ void onPageChange(int page){
       ),
       body: Constants.tabWidget[_page],
       drawer: const CommunityListDrawer(),
-      endDrawer: const ProfileDrawer(),
-      bottomNavigationBar: CupertinoTabBar(
+      endDrawer:isAuth? const ProfileDrawer() : null,
+      bottomNavigationBar:isAuth? CupertinoTabBar(
         currentIndex: _page,
         activeColor:currentTheme.iconTheme.color,
         backgroundColor: currentTheme.backgroundColor,
@@ -86,7 +86,7 @@ void onPageChange(int page){
           BottomNavigationBarItem(icon: Icon(Icons.add),label: 'Add')
         ], 
         onTap: onPageChange,
-      ),
+      ):null,
     );
   }
   

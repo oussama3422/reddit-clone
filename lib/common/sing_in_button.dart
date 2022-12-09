@@ -5,11 +5,12 @@ import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 import 'package:reddit_clone/theme/pallets.dart';
 
 class SingInButton extends ConsumerWidget {
-  const SingInButton({super.key});
+  final bool isFromLogin;
+  const SingInButton({super.key,this.isFromLogin=true});
 
 
   void singinWithGoogle(BuildContext context,WidgetRef ref){
-   ref.read(authControllerProvider.notifier).singInWithGoogle(context);
+   ref.read(authControllerProvider.notifier).singInWithGoogle(context,isFromLogin);
   }
   @override
   Widget build(BuildContext context,WidgetRef ref) {

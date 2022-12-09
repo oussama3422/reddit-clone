@@ -11,7 +11,7 @@ class Post {
   final String communityProfile;
   final List<String> upvotes;
   final List<String> downvotes;
-  final int commmentCount;
+  final int commentCount;
   final String username;
   final String uid;
   final String type;
@@ -26,7 +26,7 @@ class Post {
     required this.communityProfile,
     required this.upvotes,
     required this.downvotes,
-    required this.commmentCount,
+    required this.commentCount,
     required this.username,
     required this.uid,
     required this.type,
@@ -43,7 +43,7 @@ class Post {
     String? communityProfile,
     List<String>? upvotes,
     List<String>? downvotes,
-    int? commmentCount,
+    int? commentCount,
     String? username,
     String? uid,
     String? type,
@@ -59,7 +59,7 @@ class Post {
       communityProfile: communityProfile ?? this.communityProfile,
       upvotes: upvotes ?? this.upvotes,
       downvotes: downvotes ?? this.downvotes,
-      commmentCount: commmentCount ?? this.commmentCount,
+      commentCount: commentCount ?? this.commentCount,
       username: username ?? this.username,
       uid: uid ?? this.uid,
       type: type ?? this.type,
@@ -78,7 +78,7 @@ class Post {
       'communityProfile': communityProfile,
       'upvotes': upvotes,
       'downvotes': downvotes,
-      'commmentCount': commmentCount,
+      'commentCount': commentCount,
       'username': username,
       'uid': uid,
       'type': type,
@@ -97,7 +97,7 @@ class Post {
       communityProfile: map['communityProfile'],
       upvotes: List<String>.from(map['upvotes']),
       downvotes: List<String>.from(map['downvotes']),
-      commmentCount: map['commmentCount']?.toInt(),
+      commentCount: map['commentCount']?.toInt(),
       username: map['username'],
       uid: map['uid'],
       type: map['type'],
@@ -112,7 +112,7 @@ class Post {
 
   @override
   String toString() {
-    return 'Post(id: $id, title: $title, link: $link, description: $description, communityName: $communityName, communityProfile: $communityProfile, upvotes: $upvotes, downvotes: $downvotes, commmentCount: $commmentCount, username: $username, uid: $uid, type: $type, createAt: $createdAt, awards: $awards)';
+    return 'Post(id: $id, title: $title, link: $link, description: $description, communityName: $communityName, communityProfile: $communityProfile, upvotes: $upvotes, downvotes: $downvotes, commentCount: $commentCount, username: $username, uid: $uid, type: $type, createAt: $createdAt, awards: $awards)';
   }
 
   @override
@@ -128,7 +128,7 @@ class Post {
       other.communityProfile == communityProfile &&
       listEquals(other.upvotes, upvotes) &&
       listEquals(other.downvotes, downvotes) &&
-      other.commmentCount == commmentCount &&
+      other.commentCount == commentCount &&
       other.username == username &&
       other.uid == uid &&
       other.type == type &&
@@ -146,7 +146,7 @@ class Post {
       communityProfile.hashCode ^
       upvotes.hashCode ^
       downvotes.hashCode ^
-      commmentCount.hashCode ^
+      commentCount.hashCode ^
       username.hashCode ^
       uid.hashCode ^
       type.hashCode ^

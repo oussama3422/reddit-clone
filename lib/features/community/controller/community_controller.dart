@@ -13,6 +13,7 @@ import 'package:reddit_clone/models/community.dart';
 import 'package:routemaster/routemaster.dart';
 
 import '../../../core/provider/storage_repository_provider.dart';
+import '../../../models/post.dart';
 import '../../auth/controller/auth_controller.dart';
 
 final userCommunityProvider=StreamProvider((ref){
@@ -35,6 +36,13 @@ final communtyControllerProvider = StateNotifierProvider<CommunityController,boo
 final getCommunityByNameProvider=StreamProvider.family((ref,String name) {
   return ref.watch(communtyControllerProvider.notifier).getCommunityyName(name);
 });
+
+/// get communtiy posts Provider
+final getCommunityPostsProvider = StreamProvider.family((ref,String name){
+  return ref.read(communtyControllerProvider.notifier).getCommunityPosts(name);
+});
+/// 
+
 class CommunityController extends StateNotifier<bool>{
 
   final CommunityRepository _communtiyRepository;
@@ -151,5 +159,10 @@ class CommunityController extends StateNotifier<bool>{
     (l) =>showSnackBar(context, l.message) ,
     (r) => Routemaster.of(context).pop(),
     );
+  }
+
+  /// get [communtiy Posts] with commuties's name
+  Stream<List<Post>> getCommunityPosts(String name){
+    return _communtiyRepository.getCommunityPosts(name);
   }
 }

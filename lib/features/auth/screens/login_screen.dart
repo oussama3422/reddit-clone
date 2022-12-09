@@ -8,6 +8,11 @@ import 'package:reddit_clone/features/auth/controller/auth_controller.dart';
 class LoginScreen extends ConsumerWidget {
   const LoginScreen({super.key});
 
+
+   void singInAsGuest(WidgetRef ref,BuildContext context){
+    ref.read(authControllerProvider.notifier).singInAsGuest(context);
+   }
+
   @override
   Widget build(BuildContext context,WidgetRef ref) {
     final isLoading=ref.watch(authControllerProvider);
@@ -16,7 +21,7 @@ class LoginScreen extends ConsumerWidget {
         title: Image.asset(Constants.logoPath,height: 40),
         centerTitle: true,
         actions: [
-          TextButton(onPressed: (){}, child: const Text('Skip',style:TextStyle(fontWeight: FontWeight.bold)))
+          TextButton(onPressed: ()=>singInAsGuest(ref,context), child: const Text('Skip',style:TextStyle(fontWeight: FontWeight.bold)))
         ],
         ),
       body:isLoading? const Loader(): Column(

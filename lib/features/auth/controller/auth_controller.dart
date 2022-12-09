@@ -32,13 +32,23 @@ class AuthController extends StateNotifier<bool>{
       _ref=ref, super(false)
       ;
 
-     Stream<User?> get authStateChange=>_authRepository.authStateChange;
+Stream<User?> get authStateChange=>_authRepository.authStateChange;
 
-    void singInWithGoogle(BuildContext context)async{
+
+///this method is SingIn any user With goolse
+void singInWithGoogle(BuildContext context,bool isFromLogin)async{
       state=true;
-      final user =await _authRepository.singInWithGoogle();
+      final user =await _authRepository.singInWithGoogle(isFromLogin);
       state=false;
-      user.fold((l)=>showSnackBar(context, l.toString()),(userModel)=>_ref.read(userProvder.notifier).update((state) => userModel));
+      user.fold((l)=>showSnackBar(context, l.message),(userModel)=>_ref.read(userProvder.notifier).update((state) => userModel));
+}
+
+///this method is SingIn any user as Guest which mean anounymos
+void singInAsGuest(BuildContext context)async{
+      state=true;
+      final user =await _authRepository.singInAsGuest();
+      state=false;
+      user.fold((l)=>showSnackBar(context, l.message),(userModel)=>_ref.read(userProvder.notifier).update((state) => userModel));
     }
 Stream<UserModel> getUserData(String uid){
 return _authRepository.getUserData(uid);
